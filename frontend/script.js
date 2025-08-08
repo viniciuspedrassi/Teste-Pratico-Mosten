@@ -79,8 +79,14 @@ function renderizarItens() {
       <p><strong>Gênero:</strong> ${item.genero}</p>
       <p>${item.descricao || ''}</p>
       <p>👍: ${item.gostei} | 👎: ${item.naoGostei}</p>
-      <button onclick="votar(${item.id}, 'gostei')">Gostei</button>
-      <button onclick="votar(${item.id}, 'naoGostei')">Não Gostei</button>
+<div class="botoes-voto">
+  <button class="botao-gostei" onclick="votar(${
+    item.id
+  }, 'gostei')">Gostei</button>
+  <button class="botao-nao-gostei" onclick="votar(${
+    item.id
+  }, 'naoGostei')">Não Gostei</button>
+</div>
     `;
     lista.appendChild(div);
   });
