@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang=pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Votação - Filmes e Séries</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+<h1>Sistema de Votação</h1>
+
+<div id="totais-gerais">
+  <p>👍 Total Gostei: <span id="totalGostei">0</span></p>
+  <p>👎 Total Não Gostei: <span id="totalNaoGostei">0</span></p>
+</div>
+
+<!--Lista de Filmes e Series-->
+<div id="lista-itens"></div>
+
+<!--Formulario-->
+<h2>Adicionar Novo Filme ou Série</h2>
+  <form id="formulario">
+    <input type="text" id="titulo" placeholder="Título" required><br>
+    <input type="text" id="genero" placeholder="Gênero" required><br>
+    <input type="text" id="imagem" placeholder="URL da Imagem" required><br>
+    <textarea id="descricao" placeholder="Descrição (opcional)"></textarea><br>
+    <button type="submit">Adicionar</button>
+  </form>
+
+
+  <script src="script.js"></script>
+  </body>
+</html>
