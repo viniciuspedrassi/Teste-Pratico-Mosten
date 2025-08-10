@@ -12,56 +12,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.testePraticoMosten.api.model.Item;
-import com.testePraticoMosten.api.repositories.ItemRepository;
+import com.testePraticoMosten.api.services.ItemService;
 
 @RestController
 @RequestMapping("/api/itens")
 public class ItemController {
 
-	private ItemRepository ir;
+	private ItemService itemService;
 
-	public ItemController(ItemRepository itemRepository) {
-		this.ir = itemRepository;
+	public ItemController(ItemService itemService) {
+		this.itemService = itemService;
 	}
 
 	@GetMapping
 	public List<Item> listarTodos() {
-		return ir.findAll();
+		return itemService.listarTodos();
 	}
 
 	@PostMapping
 	public Item adicionar(@RequestBody Item item) {
-		return ir.save(item);
+		return itemService.adicionar(item);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void deletar(@PathVariable Long id) {
-	Item item = ir.findById(id).orElseThrow();
-    ir.delete(item);
+	itemService.deletar(id);
 	}
 
 	@PutMapping("/{id}/gostei")
 	public Item votarGostei(@PathVariable Long id) {
-		Item item = ir.findById(id).orElseThrow();
-		item.setGostei(item.getGostei() + 1);
-		return ir.save(item);
+		return itemService.votarGostei(id);
 	}
 
 	@PutMapping("/{id}/nao-gostei")
 	public Item votarNaoGostei(@PathVariable Long id) {
-		Item item = ir.findById(id).orElseThrow();
-		item.setNaoGostei(item.getNaoGostei() + 1);
-		return ir.save(item);
+		return itemService.votarNaoGostei(id);
 	}
 
 	@GetMapping("/total-gostei")
 	public Integer totalGostei() {
-		return ir.totalGostei();
+		return itemService.totalGostei();
 	}
 
 	@GetMapping("/total-nao-gostei")
 	public Integer totalNaoGostei() {
-		return ir.totalNaoGostei();
+		return itemService.totalNaoGostei();
 	}
 
 }
