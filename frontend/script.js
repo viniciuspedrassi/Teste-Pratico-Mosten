@@ -1,73 +1,25 @@
-// Recupera os dados salvos ou define dados iniciais
-let itens = JSON.parse(localStorage.getItem('itens')) || [
-  {
-    id: 1,
-    titulo: 'Matrix',
-    genero: 'Ficção Científica',
-    descricao: 'Uma realidade simulada controlada por máquinas.',
-    imagem: 'https://revistacontinente.com.br/image/view/news/image/2117',
-    gostei: 0,
-    naoGostei: 0,
-  },
-  {
-    id: 2,
-    titulo: 'Breaking Bad',
-    genero: 'Drama/Crime',
-    descricao: 'Professor vira produtor de metanfetamina.',
-    imagem:
-      'https://www.planocritico.com/wp-content/uploads/2020/06/breaking_bad_temporada_4_plano_critico-1-1024x683.jpg',
-    gostei: 0,
-    naoGostei: 0,
-  },
-  {
-    id: 3,
-    titulo: 'Harry Potter',
-    genero: 'Fantasia/Aventura',
-    descricao: 'Um jovem bruxo descobre seu destino em uma escola de magia.',
-    imagem:
-      'https://cienciahoje.org.br/wp-content/uploads/2025/02/harry-potter-pedra-filosofal-1024x579.jpg',
-    gostei: 0,
-    naoGostei: 0,
-  },
-  {
-    id: 4,
-    titulo: 'Senhor dos Anéis',
-    genero: 'Fantasia Épica',
-    descricao:
-      'Uma jornada para destruir um anel poderoso que pode dominar o mundo.',
-    imagem:
-      'https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2021/08/49428_1F18FCF04B4A8036-1.jpg?w=849&h=477&crop=0',
-    gostei: 0,
-    naoGostei: 0,
-  },
-  {
-    id: 5,
-    titulo: 'The Office',
-    genero: 'Comédia',
-    descricao: 'A vida cotidiana e engraçada de funcionários em um escritório.',
-    imagem:
-      'https://cdn2.nbcuni.com/NBCUniversal/styles/newsroom_stories_16_9_image_style/s3/2025-03/TheOfficeHeroArt.jpg?VersionId=OWiCWktqo6C3nlCQgPzSHcN.6JCD6TIm&h=d1cb525d&itok=P5OwzFXm',
-    gostei: 0,
-    naoGostei: 0,
-  },
-];
-
-function salvarDados() {
-  localStorage.setItem('itens', JSON.stringify(itens));
+function atualizarTotais() {
+  atualizarTotalGostei();
+  atualizarTotalNaoGostei();
 }
 
-function atualizarTotais() {
-  let totalGostei = 0,
-    totalNaoGostei = 0;
-  itens.forEach(item => {
-    totalGostei += item.gostei;
-    totalNaoGostei += item.naoGostei;
-  });
+async function atualizarTotalGostei() {
+  const response = await fetch('http://localhost:8080/api/itens/total-gostei');
+  const totalGostei = await response.json();
   document.getElementById('totalGostei').textContent = totalGostei;
+}
+
+async function atualizarTotalNaoGostei() {
+  const response = await fetch(
+    'http://localhost:8080/api/itens/total-nao-gostei'
+  );
+  const totalNaoGostei = await response.json();
   document.getElementById('totalNaoGostei').textContent = totalNaoGostei;
 }
 
-function renderizarItens() {
+async function renderizarItens() {
+  const response = await fetch('http://localhost:8080/api/itens');
+  const itens = await response.json();
   const lista = document.getElementById('lista-itens');
   lista.innerHTML = '';
   itens.forEach(item => {
@@ -85,7 +37,7 @@ function renderizarItens() {
   }, 'gostei')">Gostei</button>
   <button class="botao-nao-gostei" onclick="votar(${
     item.id
-  }, 'naoGostei')">Não Gostei</button>
+  }, 'nao-gostei')">Não Gostei</button>
 </div>
     `;
     lista.appendChild(div);
@@ -93,25 +45,21 @@ function renderizarItens() {
   atualizarTotais();
 }
 
-function votar(id, tipo) {
-  const item = itens.find(i => i.id === id);
-  if (item) {
-    if (tipo === 'gostei') item.gostei++;
-    else item.naoGostei++;
-    salvarDados();
-    renderizarItens();
-  }
+async function votar(id, tipo) {
+  await fetch(`http://localhost:8080/api/itens/${id}/${tipo}`, {
+    method: 'put',
+  });
+  renderizarItens();
 }
 
-document.getElementById('formulario').addEventListener('submit', function (e) {
-  e.preventDefault();
+async function salvar(event) {
+  event.preventDefault();
   const titulo = document.getElementById('titulo').value;
   const genero = document.getElementById('genero').value;
   const imagem = document.getElementById('imagem').value;
   const descricao = document.getElementById('descricao').value;
 
   const novoItem = {
-    id: Date.now(),
     titulo,
     genero,
     imagem,
@@ -120,11 +68,16 @@ document.getElementById('formulario').addEventListener('submit', function (e) {
     naoGostei: 0,
   };
 
-  itens.push(novoItem);
-  salvarDados();
+  await fetch('http://localhost:8080/api/itens', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(novoItem),
+  });
   renderizarItens();
-  e.target.reset();
-});
+  document.getElementById('formulario').reset();
+}
 
 // Inicializa a página
 renderizarItens();

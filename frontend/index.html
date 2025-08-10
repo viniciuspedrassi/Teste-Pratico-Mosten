@@ -10,17 +10,17 @@
   <body>
 <h1>Sistema de Votação</h1>
 
-<div id="totais-gerais">
+<div class="totais-gerais">
   <p>👍 Total Gostei: <span id="totalGostei">0</span></p>
   <p>👎 Total Não Gostei: <span id="totalNaoGostei">0</span></p>
 </div>
 
 <!--Lista de Filmes e Series-->
-<div id="lista-itens"></div>
+<div id="lista-itens" class="lista-item"></div>
 
 <!--Formulario-->
 <h2>Adicionar Novo Filme ou Série</h2>
-  <form id="formulario">
+  <form id="formulario" onsubmit="salvar(event)">
     <input type="text" id="titulo" placeholder="Título" required><br>
     <input type="text" id="genero" placeholder="Gênero" required><br>
     <input type="text" id="imagem" placeholder="URL da Imagem" required><br>

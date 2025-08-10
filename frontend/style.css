@@ -3,7 +3,7 @@ body {
   margin: 20px;
 }
 
-#totais-gerais {
+.totais-gerais {
   display: flex;
   gap: 30px;
   align-items: center;
