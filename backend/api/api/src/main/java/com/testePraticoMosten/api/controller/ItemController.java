@@ -2,6 +2,7 @@ package com.testePraticoMosten.api.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import com.testePraticoMosten.api.model.Item;
 import com.testePraticoMosten.api.services.ItemService;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/itens")
 public class ItemController {
 
